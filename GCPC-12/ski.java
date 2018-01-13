@@ -1,3 +1,6 @@
+/* DOES NOT WORK.... Eric Cannot correctly impleent the spec for some reason */
+
+
 import java.util.Scanner;
 import java.util.function.Function;
 
