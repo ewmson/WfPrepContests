@@ -1,4 +1,4 @@
-/* DOES NOT WORK.... Eric Cannot correctly impleent the spec for some reason */
+/* submitted after contest */
 
 
 import java.util.Scanner;
