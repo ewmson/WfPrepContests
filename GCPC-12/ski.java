@@ -2,6 +2,7 @@ import java.util.Scanner;
 import java.util.function.Function;
 
 import static java.lang.Double.max;
+import static java.lang.Math.atan;
 
 public class ski {
 
@@ -13,16 +14,13 @@ public class ski {
             p = sc.nextInt();
             H = sc.nextInt();
             L = sc.nextInt();
-            v0 = Math.sqrt(2*g * (j-H));
-            for (int ii = 0; ii <= 5; ii++){
-                System.err.println(slope_height(ii*10));
-            }
+            v0 = Math.sqrt(2*g * (j));
 
-            slope_height(40.82482905);
             double time_val = binarySearch(ski::difference, 0.00001, 99999999.0, 0);
 
-            double final_vel = Math.sqrt(2*g*(j-slope_height(time_val)));
-            System.out.println(time_val +" " +  final_vel);
+            double final_vel = Math.sqrt(2*g*((j+H + p) - slope_height(time_val)));
+            double angle = Math.abs(atan(slope_deriv(time_val)) - atan(flight_deriv(time_val))) * 180 / Math.PI;
+            System.out.println(time_val +" " +  final_vel + " " +angle);
 
 
         }
@@ -55,21 +53,35 @@ public class ski {
         double slope = slope_height(time);
         return slope - f;
     }
-
+    static double flight_deriv(double time){
+       return  -1 * g*time/(v0*v0);
+    }
+    static double slope_deriv(double time){
+        if (time < 0){
+            return 0;
+        }
+        if (time < L/2){
+            return -1 * H * 4 * (time / ((L*L)));
+        }
+        if (time > L){
+            return 0;
+        }
+        return 4 * H * (time / L - 1) / L;
+    }
     private static double slope_height(double time) {
         if (time < 0){
             return H;
         }
         if (time < L/2){
-            return H * (1- 2*(1/time) * (1/time));
+            return H * (1- 2*(time/L) * (time/L));
         }
         if (time >= L){
             return 0;
         }
-        return 2*H * ((1/time) - 1) * ((1/time) - 1);
+        return 2*H * ((time/L) - 1) * ((time/L) - 1);
     }
 
     static double flight_height(double t){
-        return -g/2 * (t/v0) * (t/v0) + H + p;
+        return H + p + -0.5 * g * t*t /(v0*v0) ;
     }
 }
